@@ -15,7 +15,7 @@ class Database {
     }
 
     create(components) {
-        const id = this.currentId++;
+        const id = ++this.currentId;
         this.entities[id] = { ...components, id };
 
         return id;
@@ -31,3 +31,5 @@ class Database {
         return componentNames.sort().join(',');
     }
 }
+
+module.exports = Database;
