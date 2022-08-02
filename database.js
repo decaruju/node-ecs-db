@@ -1,5 +1,9 @@
 class Database {
     constructor() {
+        this.reset();
+    }
+
+    reset() {
         this.currentId = 0;
         this.entities = {};
         this.indexes = {};
@@ -10,20 +14,21 @@ class Database {
     }
 
     index(componentNames) {
-        if (!this.indexes[this.componentNamesToString(componentNames)]) this.addIndex(componentNames);
-        return this.indexes[this.componentNamesToString(componentNames)];
+        const indexName = this.componentNamesToString(componentNames);
+        if (!this.indexes[indexName]) this.addIndex(componentNames);
+        return this.indexes[indexName];
     }
 
     create(components) {
         const id = ++this.currentId;
         this.entities[id] = { ...components, id };
 
-        return id;
+        return this.entities[id];
     }
 
     addIndex(componentNames) {
         this.indexes[this.componentNamesToString(componentNames)] = Object.values(this.entities).filter((entity) => {
-            return componentNames.all((componentName) => entity[componentName]);
+            return componentNames.every((componentName) => entity[componentName]);
         });
     }
 
